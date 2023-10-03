@@ -4,39 +4,45 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
+import org.freedesktop.gstreamer.Element;
+import org.freedesktop.gstreamer.ElementFactory;
+import org.freedesktop.gstreamer.Gst;
+import org.freedesktop.gstreamer.Pipeline;
 import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
-
 @Service
 public class videoService {
-    public void requestVideo(String targetUrl) throws URISyntaxException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://example.com/api/resource");
 
-// 设置请求头
-        httpGet.setHeader("Authorization", "Bearer YourAccessToken");
-        httpGet.setHeader("User-Agent", "YourUserAgent");
-
-// 设置请求参数（可选）
-        URIBuilder uriBuilder = new URIBuilder(httpGet.getURI());
-        uriBuilder.setParameter("param1", "value1");
-        uriBuilder.setParameter("param2", "value2");
-
-        httpGet.setURI(uriBuilder.build());
+    private Pipeline pipeline;
+    private Element source, convert, encoder, pay, sink;
 
 
-        try {
-            HttpResponse response = (HttpResponse) httpClient.execute(httpGet);
 
-            // 处理响应，可能包含视频流数据
-            // 这里可以将响应数据传输给客户端或进行其他处理
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 处理请求失败的情况
+        public void setupPipeline(String url,String port) {
+            Gst.init();
+            pipeline = new Pipeline();
+            Element udpsrc = ElementFactory.make("udpsrc", "udpsrc");
+            udpsrc.set("port", 5000);
+
+            Element udpsink = ElementFactory.make("udpsink", "udpsink");
+            udpsink.set("host", "192.168.0.101");
+            udpsink.set("port", 6000);
+
+            pipeline.addMany(udpsrc, udpsink);
+            Pipeline.linkMany(udpsrc, udpsink);
         }
-    }
+
+        public void startForwarding() {
+            pipeline.play();
+        }
+
+        public void stopForwarding() {
+            pipeline.stop();
+        }
 }
 

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class sessionManager {
+public class SessionManager {
 
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 

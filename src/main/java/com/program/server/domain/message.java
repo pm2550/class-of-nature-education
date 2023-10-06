@@ -5,6 +5,25 @@ public class message {
     String user;
     String type;
     String target;
+    String port;
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    String source;
     public String getUser() {
         return user;
     }

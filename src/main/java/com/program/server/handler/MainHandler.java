@@ -1,6 +1,7 @@
 package com.program.server.handler;
 
 import com.program.server.domain.message;
+import com.program.server.service.RtspService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -9,8 +10,9 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.program.server.utils.SessionManager;
 import com.alibaba.fastjson.JSON;
-
+import com.program.server.service.webService;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 
 @Component
@@ -23,21 +25,21 @@ public class MainHandler extends TextWebSocketHandler {
       MainHandler.sessionManager = sessionManager;
     }
 
+    private static webService webService;
 
+    @Autowired
+    public void setWebService(webService webService) {
+        MainHandler.webService = webService;
+    }
+    private static RtspService rtspService;
+    @Autowired
+    public void setvideoService(RtspService rtspService) {
+        MainHandler.rtspService = rtspService;
+    }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
-    }
-    private int selectAvailablePort() {
-        for (int port = 10000; port < 20000; port++) {
-            try (ServerSocket socket = new ServerSocket(port)) {
-                return port;  // 如果成功，则这个端口是可用的
-            } catch (IOException e) {
-                // 如果捕获到异常，则此端口不可用，尝试下一个端口
-            }
-        }
-        throw new RuntimeException("No available port found");
     }
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -60,12 +62,12 @@ public class MainHandler extends TextWebSocketHandler {
             session.sendMessage(new TextMessage("received order " + Msg.getMsg() +
                     " from " + session.getAttributes().get("username")));
             if(Msg.getMsg().equals("open")) {
-                int port = selectAvailablePort();
+                int port = webService.selectAvailablePort();
                 Msg.setMsg("video send to:"+port);
                 String sendMessage=JSON.toJSONString(Msg);
                 WebSocketSession sendSession= sessionManager.getSession(Msg.getTarget());
                 if(sendSession==null)
-                    session.sendMessage(new TextMessage("对象错误"));
+                    session.sendMessage(new TextMessage("target not found"));
                 else {
                     sendSession.sendMessage(new TextMessage(sendMessage));
                     System.out.println("push" + sendMessage + "to " + Msg.getTarget());
@@ -76,11 +78,13 @@ public class MainHandler extends TextWebSocketHandler {
                 String sendMessage=JSON.toJSONString(Msg);
                 WebSocketSession sendSession= sessionManager.getSession(Msg.getTarget());
                 if(sendSession==null)
-                    session.sendMessage(new TextMessage("对象错误"));
+                    session.sendMessage(new TextMessage("target not found"));
                     else {
                     sendSession.sendMessage(new TextMessage(sendMessage));
                     System.out.println("push" + sendMessage + "to " + Msg.getTarget());
                 }
+                    rtspService.stopServer();
+                System.out.println("停止rtsp\n");
             }
 
         }

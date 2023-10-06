@@ -46,6 +46,7 @@ void send_order(client* c, websocketpp::connection_hdl con_hdl) {
             }
 
             Msg.target = "camera";
+            Msg.source = "player";
             string orderMessage = OrderToJsonString(Msg);
             c->send(con_hdl, orderMessage, websocketpp::frame::opcode::text, ec);
             if (ec) {
@@ -87,7 +88,6 @@ void on_open(client* c, websocketpp::connection_hdl hdl) {
 int main(int argc, char* argv[]) {
     // Create a client endpoint
     client c;
-
     std::string uri = "ws://localhost:8082/hello";
 
     if (argc == 2) {

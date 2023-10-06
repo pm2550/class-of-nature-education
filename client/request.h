@@ -14,9 +14,10 @@
 struct sendOrder {
     std::string orderType;
     std::string orderMsg;
-    std::string orderTo;
+    std::string source;
     std::string type;
     std::string target;
+    std::string targetMsg;
 };
 
 std::string OrderToJsonString(const sendOrder& msg);

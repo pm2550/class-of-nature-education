@@ -1,8 +1,0 @@
-﻿  hello.cpp
-  request.cpp
-  源.cpp
-D:\resource\socketpp\websocketpp\frame.hpp(834,25): warning C4267: “=”: 从“size_t”转换到“uint32_t”，可能丢失数据
-D:\resource\socketpp\websocketpp\common\md5.hpp(367,34): warning C4267: “+=”: 从“size_t”转换到“websocketpp::md5::md5_word_t”，可能丢失数据
-D:\resource\socketpp\websocketpp\sha1\sha1.hpp(176,28): warning C4267: “=”: 从“size_t”转换到“unsigned int”，可能丢失数据
-  正在生成代码...
-  client.vcxproj -> C:\Users\10210\source\repos\client\x64\Debug\client.exe

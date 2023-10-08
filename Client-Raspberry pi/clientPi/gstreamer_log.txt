@@ -1,0 +1,30 @@
+start to connect
+succeed to connect
+[2023-10-03 04:35:07] [connect] Successful connection
+[2023-10-03 04:35:07] [connect] Successful connection
+[2023-10-03 04:35:07] [connect] WebSocket Connection 192.168.20.102:8082 v-2 "WebSocket++/0.8.2" /hello 101
+[2023-10-03 04:35:07] [connect] WebSocket Connection 192.168.20.102:8082 v-2 "WebSocket++/0.8.2" /sendReply 101
+success---------------------------
+
+[2023-10-03 04:35:07] [frame_header] Dispatching write containing 1 message(s) containing 6 header bytes and 5 payload bytes
+[2023-10-03 04:35:07] [frame_header] Header Bytes: 
+[0] (6) 81 85 52 5E 11 A1 
+
+succeeded to send hello
+Success
+[2023-10-03 04:35:08] [frame_header] Dispatching write containing 1 message(s) containing 6 header bytes and 63 payload bytes
+[2023-10-03 04:35:08] [frame_header] Header Bytes: 
+[0] (6) 81 BF 11 9F 49 D3 
+
+on_message called with hdl: 0x11b0c98 and message: Hello camera, I have received: hello
+noneon_message called with hdl: 0x11b0c98 and message: {"msg":"video send to:10000","source":"player","target":"camera","type":"order"}
+replying
+
+send reply:{"port":"10000","source":"machine","target":"player","type":"reply","videoMsg":""}
+[2023-10-03 04:35:11] [frame_header] Dispatching write containing 1 message(s) containing 6 header bytes and 82 payload bytes
+[2023-10-03 04:35:11] [frame_header] Header Bytes: 
+[0] (6) 81 D2 14 28 7B FD 
+
+on_message called with hdl: 0x11b0c98 and message: {"msg":"stop video","source":"player","target":"camera","type":"order"}
+replying
+
